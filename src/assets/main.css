@@ -1,85 +1,41 @@
 :root {
-    /* Palette*/
-    --primary: #C1FF00;
-    /* Electric Lime */
-    --primary-light: #D4FF40;
-    --primary-dark: #9AC000;
-    --secondary: #222222;
-    /* Stealth Gray */
-    --accent: #C1FF00;
+    /* Updated Palette to Orange */
+    --primary: #ee6909;        /* Matches your main.js Orange */
+    --primary-light: #ff8c33;
+    --primary-dark: #b34e00;
+    --secondary: #222222;      /* Stealth Gray */
+    --accent: #ee6909;
     --accent-2: #FFFFFF;
 
     /* Neutrals */
-    --bg-base: #0A0A0A;
-    /* Absolute Black */
-    --bg-card: #121212;
-    /* Deep Charcoal */
-    --bg-surface: #1A1A1A;
-    --bg-elevated: #242424;
-    --border: rgba(255, 255, 255, 0.05);
-    --border-light: rgba(255, 255, 255, 0.1);
+    --bg-base: #FFFFFF;        /* Changed to White for Light Theme */
+    --text-primary: #1A1A1A;
+    --text-secondary: #666666;
 
-    /* Text */
-    --text-primary: #FFFFFF;
-    --text-secondary: #A0A0A0;
-    --text-muted: #666666;
-
-
-    /* Radius */
-    --radius-sm: 6px;
-    --radius-md: 12px;
-    --radius-lg: 20px;
-    --radius-xl: 32px;
-    --radius-full: 9999px;
+    /* ... keep your Radius variables as they were ... */
 }
 
-/* Global Typography */
-body {
-    font-family: 'Roboto Condensed', sans-serif !important;
+/* FIX: Ensure the Vuetify container is visible and has height */
+#app, .v-application {
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
-/* Navbar Styles */
-.v-app-bar {
-    font-family: 'Oswald', sans-serif !important;
-}
-
-.v-btn {
+/* Navbar Font Style */
+.v-app-bar .v-btn {
     font-family: 'Oswald', sans-serif !important;
     letter-spacing: 1px !important;
-    transition: all 0.3s ease !important;
-    text-transform: uppercase !important;
 }
 
-.v-btn:hover {
-    color: #ee6909 !important;
-    background-color: transparent !important;
+/* Global Typography - Ensure these are linked in index.html */
+body {
+    font-family: 'Roboto Condensed', sans-serif !important;
+    margin: 0;
+    overflow-x: hidden;
 }
 
-/* Active Page Indicator (Underline) */
-.v-btn--active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 15%;
-    width: 70%;
-    height: 2px;
-    background-color: #ee6909;
-    border-radius: 2px;
+.h-100vh {
+    height: 100vh !important;
 }
 
-/* Ensure Logo link doesn't have active underline */
-.v-app-bar-title .router-link-active::after {
-    display: none !important;
-}
-
-/* Specific styling for the orange Sign Up button */
-.v-btn.bg-primary:hover {
-    background-color: #ff8c33 !important;
-    color: black !important;
-}
-
-/* Navbar Title Styling */
-.v-app-bar-title {
-    letter-spacing: 2px !important;
-    min-width: 250px !important;
-}

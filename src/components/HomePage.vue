@@ -43,7 +43,7 @@ const expiryDays = getExpiryDays(userDetails.subscription?.name);
                                     </div>
                                 </div>
                                 <v-spacer></v-spacer>
-                                <v-btn color="#ee6909" variant="flat" rounded="lg" class="font-weight-black px-6" to="/bundles">
+                                <v-btn color="#ee6909" variant="flat" rounded="lg" class="font-weight-black px-6" @click="$router.push('/bundles')">
                                     {{ userDetails.subscription ? 'Renew' : 'Explore' }}
                                 </v-btn>
                             </div>

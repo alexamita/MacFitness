@@ -59,10 +59,10 @@ const userDetails = JSON.parse(localStorage.getItem('userSignUpData')) || {}
 
                     <v-row class="mt-6" justify="center">
                         <v-col cols="auto">
-                            <v-btn v-if="!userDetails.subscription" color="#ee6909" variant="flat" rounded="lg" class="font-weight-black px-8" to="/bundles">
-                                EXPLORE BUNDLES
+                            <v-btn v-if="!userDetails.subscription" color="#ee6909" variant="flat" rounded="lg" class="font-weight-black px-8" @click="$router.push('/bundles')">
+                                UPGRADE PLAN
                             </v-btn>
-                            <v-btn v-else color="#ee6909" variant="outlined" rounded="lg" class="font-weight-black px-8" to="/bundles">
+                            <v-btn v-else color="#ee6909" variant="outlined" rounded="lg" class="font-weight-black px-8" @click="$router.push('/bundles')">
                                 CHANGE PLAN
                             </v-btn>
                         </v-col>

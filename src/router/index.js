@@ -51,6 +51,11 @@ const router = createRouter({
             name: 'admin',
             component: Admin,
         },
+        // Catch-all route to redirect any typos back to Landing
+        {
+            path: '/:pathMatch(.*)*',
+            redirect: '/'
+        }
     ],
 });
 

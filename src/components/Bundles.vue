@@ -1,17 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../services/auth'
 
 const router = useRouter();
+const { isAuthenticated} = useAuth();
 
 const showBundleDialog = ref(false)
-const isLoggedIn = localStorage.getItem('userSignUpData')
 const selectedBundle = ref(null)
 const selectedPrice = ref(null)
 
 
 function showBundle(name, price) {
-    if (isLoggedIn) {
+    if (isAuthenticated.value) {
         selectedBundle.value = name
         selectedPrice.value = price
         showBundleDialog.value = true
@@ -21,13 +22,29 @@ function showBundle(name, price) {
 }
 
 function subscribe() {
-    const userDetails = JSON.parse(localStorage.getItem('userSignUpData'))
-    userDetails.subscription = {
-        name: selectedBundle.value,
-        price: selectedPrice.value
+    try {
+        // Try to get existing data or initialize a clean object
+        const rawData = localStorage.getItem('userSignUpData');
+        const userDetails = rawData ? JSON.parse(rawData) : { email: user.value?.email };
+
+        userDetails.subscription = {
+            name: selectedBundle.value,
+            price: selectedPrice.value,
+            date: new Date().toISOString()
+        }
+
+        // Save updated data
+        localStorage.setItem('userSignUpData', JSON.stringify(userDetails))
+
+        // UI Feedback
+        showBundleDialog.value = false
+
+        // Optional: Navigate to a "Success" or "Payment" page
+        // router.push('/checkout');
+
+    } catch (err) {
+        console.error("Subscription storage failed", err);
     }
-    localStorage.setItem('userSignUpData', JSON.stringify(userDetails))
-    showBundleDialog.value = false
 }
 </script>
 
@@ -85,7 +102,7 @@ function subscribe() {
                             <v-icon color="#ee6909" icon="mdi-calendar-star" size="48"></v-icon>
                         </v-avatar>
                         <div class="text-h2 text-white font-weight-black text-uppercase mb-2" style="letter-spacing: 2px;">12 Month Elite Pass</div>
-                        <div class="text-h1 font-weight-black text-white"><span class="text-grey-lighten-1 font-weight-medium text-h3 me-3">KES</span><span style="color: #ee6909">45,000</span></div>
+                        <div class="text-h2 font-weight-black text-white"><span class="text-grey-lighten-1 font-weight-medium text-h3 me-3">KES</span><span style="color: #ee6909">45,000</span></div>
                         <div class="text-h6 mt-6 text-grey font-weight-medium text-uppercase" style="letter-spacing: 2px;">Billed Annually • Unlimited Access</div>
                     </v-card>
                 </v-col>

@@ -82,7 +82,7 @@ onMounted(() => {
             <!-- Locations List -->
             <v-row>
                 <v-col v-for="loc in locations" :key="loc.id" cols="12" class="mb-10">
-                    <v-card theme="dark" rounded="l" elevation="12" border class="overflow-hidden" style="border-color: rgba(238, 105, 9, 0.1) !important;">
+                    <v-card theme="dark" rounded="xl" elevation="12" border class="overflow-hidden" style="border-color: rgba(238, 105, 9, 0.1) !important;">
                         <v-row no-gutters>
                             <!-- Info Column -->
                             <v-col cols="12" md="5" class="pa-8 pa-md-10 d-flex flex-column">

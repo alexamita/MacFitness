@@ -71,7 +71,7 @@
                     { title: 'Sukuma Wiki & Power: Local Fuel', desc: 'A deep dive into why Kenyas traditional greens and legumes are the ultimate recovery resource for strength training.', img: '/images/news-nutrition.jpg', action: 'Get the Diet Guide' },
                     { title: 'Nairobi Altitude IQ: Urban Prep', desc: 'How our trainers use Kenyas unique high-altitude climate to boost your cardiovascular performance in the CBD.', img: '/images/aboutus-square.jpg', action: 'Explore Training' }
                 ]" :key="i" cols="12" md="4" class="d-flex">
-                        <v-card theme="dark" rounded="xl" border hover block class="flex-grow-1 d-flex flex-column overflow-hidden" style="border-color: rgba(255, 255, 255, 0.05) !important; background-color: rgba(255,255,255,0.02) !important; min-height: 540px;">
+                        <v-card theme="dark" rounded="xl"  hover block class="flex-grow-1 d-flex flex-column overflow-hidden border" style="border-color: rgba(255, 255, 255, 0.05) !important; background-color: rgba(255,255,255,0.02) !important; min-height: 540px;">
                             <v-img :src="news.img" cover height="320"></v-img>
                         <v-card-item class="pa-6">
                             <v-card-title class="text-h6 font-weight-black text-uppercase mb-3" style="line-height: 1.3; white-space: normal;">
@@ -107,7 +107,7 @@
                     { text: 'Iron Forge Fitness in Westlands is the place to be. Knowledgeable trainers and top-tier equipment.', author: 'David K.', location: 'Westlands Member', rating: 5 },
                     { text: 'The energy at Pulse Performance Center is unmatched. A perfect 2026 fitness hub!', author: 'Sheila A.', location: 'Kilimani Member', rating: 4.5 }
                 ]" :key="i" cols="12" md="4" class="d-flex">
-                    <v-card theme="dark" rounded="xl" border block class="flex-grow-1 d-flex flex-column pa-6" style="border-color: rgba(255, 255, 255, 0.05) !important;">
+                    <v-card theme="dark" rounded="xl" block class="flex-grow-1 d-flex flex-column pa-6 border" style="border-color: rgba(255, 255, 255, 0.05) !important;">
                         <v-icon color="#ee6909" icon="mdi-format-quote-close" size="48" class="mb-4" style="opacity: 0.2;"></v-icon>
                         <v-card-text class="pa-0 text-body-1 text-grey-lighten-2 italic mb-6">
                             "{{ review.text }}"
@@ -125,7 +125,7 @@
     </v-sheet>
 
     <!-- Footer -->
-    <v-footer class="bg-black px-10 py-12" border>
+    <v-footer class="bg-black px-10 py-12 border">
         <v-container>
             <v-row justify="center">
                 <v-col cols="12" md="8" class="text-center">
