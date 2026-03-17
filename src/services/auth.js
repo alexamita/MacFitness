@@ -21,7 +21,7 @@ export function useAuth() {
     const isAuthenticated = computed(() => !!user.value);
 
     // COMPUTED: Automatically calculates if the user is an admin.
-    const isAdmin = computed(() => user.value?.role === 1);
+    const isAdmin = computed(() => user.value?.role_id === 1);
 
     /**
      * LOGIN FUNCTION

@@ -33,7 +33,7 @@ function handleLogout() {
         <v-btn variant="text" @click="router.push('/homepage')" v-if="isAuthenticated" class="mx-1 text-caption font-weight-bold">HOME</v-btn>
         <v-btn variant="text" @click="router.push('/bundles')" class="mx-1 text-caption font-weight-bold">BUNDLES</v-btn>
         <v-btn variant="text" @click="router.push('/gymlocations')" class="mx-1 text-caption font-weight-bold">LOCATIONS</v-btn>
-        <v-btn @click="router.push('/admin')" v-if="isAdmin" color="#ee6909" variant="flat" class="mx-1 text-caption font-weight-black text-black">ADMIN</v-btn>
+        <v-btn @click="router.push('/admin')" v-if="isAdmin" color="#ee6909" variant="flat" class="mx-1 text-caption font-weight-black text-white">ADMIN</v-btn>
 
         <v-divider vertical inset class="mx-4 border-opacity-25"></v-divider>
 
