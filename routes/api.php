@@ -10,6 +10,7 @@ use App\Http\Controllers\BundleController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserOtpController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerifyEmailContoller;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getRole/{role}', [RoleController::class, 'readRole']);
     Route::post('/updateRole/{role}', [RoleController::class, 'updateRole']);
     Route::delete('/deleteRole/{role}', [RoleController::class, 'deleteRole']);
+
+    Route::resource('users', UserController::class);
 
     // Category Routes
     Route::post('/saveCategory', [CategoryController::class, 'createCategory']);

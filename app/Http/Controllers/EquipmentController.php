@@ -43,13 +43,6 @@ class EquipmentController extends Controller
             // Eager load Gym and Category instead of using JOIN
             $equipment = Equipment::with(['gym:id,name', 'category:id,name'])->get();
 
-            /*
-            // read equipment with gym name and category name using join
-            $equipment = Equipment::join('gyms', 'equipment.gym_id', '=', 'gyms.id')
-            ->join('categories', 'equipment.category_id', '=', 'categories.id')
-            ->select('equipment.*', 'gyms.name as gym_name', 'categories.name as category_name')
-            ->get(); // fetch all equipment with gym name and category name
-            */
             return response()->json($equipment);
             }
             catch(\Exception $exception){
