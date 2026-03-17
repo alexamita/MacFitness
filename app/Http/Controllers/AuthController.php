@@ -24,7 +24,10 @@ class AuthController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:40',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:4|max:15|confirmed',
+            'phoneNumber'=> 'required|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'gender'=> 'required|in:male,female,other',
+            'date_of_birth'=> 'required|date|before:today',
+            'password' => 'required|string|min:8|max:15',
             'user_image' => 'nullable|max:2048|mimes:jpeg,png,jpg',
             'role_id' => 'nullable|exists:roles,id',
             'gym_id' =>'required|exists:gyms,id',
@@ -39,19 +42,22 @@ class AuthController extends Controller
             $role = Role::where('name', 'USER')->first();
             $role_id = $role ? $role->id : null; // Added a check in case 'USER' role doesn't exist
         }
-        // // Fetch the default role (e.g., 'USER') from the database to assign to the new user
-        // $role = Role::where('name', 'USER')->first();
+
 
         // Create a new user with the validated data
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
+            'phoneNumber'=> $validatedData['phoneNumber'],
+            'gender'=> $validatedData['gender'],
+            'date_of_birth'=> $validatedData['date_of_birth'],
             'role_id' => $role_id,
             'gym_id' => $request->gym_id,
             // Hash the password before storing it in the database
             // 'password'=> Hash::make($validatedData['password']),
             // Alternative way to hash the password using bcrypt function
             'password' => bcrypt($validatedData['password']),
+            'is_active'=> true // to delete later
         ]);
 
         // Handle the user image upload if provided
@@ -67,19 +73,29 @@ class AuthController extends Controller
 
         try {
             $user->save();
-            // Generate a signed URL for email verification and send the verification email to the user using a custom notification class
-            $signedUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
-        );
-        // Send the verification email to the user using a custom notification class that accepts the signed URL as a parameter to include in the email content
-        $user->notify(new VerifyEmailNotification($signedUrl));
+        //     // Generate a signed URL for email verification and send the verification email to the user using a custom notification class
+        //     $signedUrl = URL::temporarySignedRoute(
+        //     'verification.verify',
+        //     now()->addMinutes(60),
+        //     ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
+        // );
+        // // Send the verification email to the user using a custom notification class that accepts the signed URL as a parameter to include in the email content
+        // $user->notify(new VerifyEmailNotification($signedUrl));
 
+            // return response()->json([
+            //     'message' => 'User registered successfully',
+            //     'user' => $user
+            // ], 201);
+
+             $token = $user->createToken('auth_token')->plainTextToken; //make sure to add hasApiTokens in user.php
+            // Return the token and user information in the response
             return response()->json([
-                'message' => 'User registered successfully',
-                'user' => $user
-            ], 201);
+                'message' => 'Registration successful',
+                'token' => $token,
+                // Include user information and their abilities (permissions) in the response
+                'user' => $user,
+                'abilities' => $user->abilities(),
+            ], 200);
         }
         catch (\Exception $exception) {
             return response()->json([
@@ -140,15 +156,15 @@ class AuthController extends Controller
 
         }
 
-            // $token = $user->createToken('auth_token')->plainTextToken; //make sure to add hasApiTokens in user.php
+            $token = $user->createToken('auth_token')->plainTextToken; //make sure to add hasApiTokens in user.php
             // Return the token and user information in the response
-            // return response()->json([
-            //     'message' => 'Login successful',
-            //     'token' => $token,
-            //     // Include user information and their abilities (permissions) in the response
-            //     'user' => $user,
-            //     'abilities' => $user->abilities(),
-            // ], 200);
+            return response()->json([
+                'message' => 'Login successful',
+                'token' => $token,
+                // Include user information and their abilities (permissions) in the response
+                'user' => $user,
+                'abilities' => $user->abilities(),
+            ], 200);
     }
 
     // 3. USER LOGOUT
