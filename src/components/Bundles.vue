@@ -59,7 +59,7 @@ function subscribe() {
             </v-row>
 
             <v-row justify="center" class="mb-12">
-                <h1 class="text-h3 font-weight-black text-black text-center">Ready to <span style="color: #ee6909">start?</span></h1>
+                <h1 class="text-h4 font-weight-black text-black text-center">Ready to <span style="color: #ee6909">start?</span></h1>
             </v-row>
 
             <v-row justify="center" align="stretch">
@@ -80,7 +80,7 @@ function subscribe() {
                         <v-avatar color="#ee6909" variant="tonal" size="64" class="mb-6">
                             <v-icon color="#ee6909" :icon="bundle.icon" size="32"></v-icon>
                         </v-avatar>
-                        <div class="text-subtitle-1 font-weight-black text-uppercase text-black mb-2" style="letter-spacing: 1px;">{{ bundle.title }}</div>
+                        <div class="text-subtitle-1 font-weight-black text-uppercase text-black mb-2">{{ bundle.title }}</div>
                         <div class="text-h4 font-weight-black text-black"><span class="text-grey-darken-1 font-weight-bold text-caption me-1">KES</span><span style="color: #ee6909">{{ bundle.price }}</span></div>
                     </v-card>
                 </v-col>
@@ -101,9 +101,9 @@ function subscribe() {
                         <v-avatar color="#ee6909" variant="tonal" size="80" class="mb-6">
                             <v-icon color="#ee6909" icon="mdi-calendar-star" size="48"></v-icon>
                         </v-avatar>
-                        <div class="text-h2 text-white font-weight-black text-uppercase mb-2" style="letter-spacing: 2px;">12 Month Elite Pass</div>
-                        <div class="text-h2 font-weight-black text-white"><span class="text-grey-lighten-1 font-weight-medium text-h3 me-3">KES</span><span style="color: #ee6909">45,000</span></div>
-                        <div class="text-h6 mt-6 text-grey font-weight-medium text-uppercase" style="letter-spacing: 2px;">Billed Annually • Unlimited Access</div>
+                        <div class="text-h4 text-white font-weight-black text-uppercase mb-2">12 Month Elite Pass</div>
+                        <div class="text-h2 font-weight-black text-white"><span class="text-grey-lighten-1 font-weight-medium text-h5 me-3">KES</span><span style="color: #ee6909">45,000</span></div>
+                        <div class="text-body-1 mt-6 text-grey font-weight-medium text-uppercase">Billed Annually • Unlimited Access</div>
                     </v-card>
                 </v-col>
             </v-row>
@@ -129,7 +129,7 @@ function subscribe() {
                     { title: 'Free Parking & Lockers', desc: 'Complimentary monitored parking and private storage.', icon: 'mdi-shield-car' },
                     { title: 'Steam & Showers', desc: 'Luxury steam rooms and high-pressure recovery showers.', icon: 'mdi-weather-fog' },
                     { title: 'Dedicated Zones', desc: 'Private, purpose-built zones for focused performance.', icon: 'mdi-account-group-outline' }
-                ]" :key="i" cols="12" sm="6" md="4" class="mb-6 d-flex">
+                ]" :key="i" cols="12" sm="6" md="3" class="mb-6 d-flex">
                     <v-card
                         rounded="xl"
                         elevation="0"
@@ -139,7 +139,7 @@ function subscribe() {
                         <v-avatar color="#ee6909" variant="tonal" size="48" class="mb-4">
                             <v-icon color="#ee6909" :icon="item.icon" size="24"></v-icon>
                         </v-avatar>
-                        <div class="text-subtitle-1 font-weight-black text-uppercase text-black mb-2" style="letter-spacing: 1px;">{{ item.title }}</div>
+                        <div class="text-subtitle-1 font-weight-black text-uppercase text-black mb-2">{{ item.title }}</div>
                         <div class="text-body-2 text-grey-darken-2" style="line-height: 1.5;">{{ item.desc }}</div>
                     </v-card>
                 </v-col>
@@ -152,7 +152,7 @@ function subscribe() {
     <!-- How to Join Section -->
     <v-sheet class="bg-grey-lighten-5 py-20">
         <v-container>
-            <v-row justify="center" class="mb-12">
+            <v-row justify="center" class="mt-12 mb-12">
                 <v-chip color="#ee6909" variant="tonal" rounded="pill" class="font-weight-black px-6 text-uppercase">
                     HOW TO JOIN
                 </v-chip>
@@ -164,9 +164,9 @@ function subscribe() {
                     { id: '03', title: 'Activate Your Access', desc: 'Finalize your membership with a secure, hassle-free payment at the front desk or via our portal.' },
                     { id: '04', title: 'Elevate Your Performance', desc: 'Receive your digital member ID and begin training immediately. Your journey starts now.' }
                 ]" :key="i" cols="12" sm="6" md="3" class="text-center mb-8 px-8">
-                    <div class="text-h1 font-weight-black mb-6" style="color: #ee6909; opacity: 0.2; line-height: 1;">{{ step.id }}</div>
-                    <div class="text-h5 font-weight-black text-black mb-3 uppercase">{{ step.title }}</div>
-                    <p class="text-grey-darken-2 text-body-1" style="line-height: 1.6;">{{ step.desc }}</p>
+                    <div class="text-h6 font-weight-black mb-6" style="color: #ee6909; opacity: 0.2;">{{ step.id }}</div>
+                    <div class="text-h6 font-weight-black text-black mb-3 text-uppercase" style="min-height: 64px;">{{ step.title }}</div>
+                    <p class="text-grey-darken-2 text-body-1" style="line-height: 1.2;">{{ step.desc }}</p>
                 </v-col>
             </v-row>
         </v-container>

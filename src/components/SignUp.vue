@@ -53,7 +53,7 @@ const form = ref(null); // Reference to the v-form component
  * SIGN UP SUBMISSION
  * Packages the data and sends it to the server
  */
-const signUp = async () => {
+const signUp = async () => { // arrow function
     // Check if Vuetify validation rules pass
     const { valid } = await form.value.validate();
     if (!valid) return;
@@ -70,8 +70,8 @@ const signUp = async () => {
     const payload = {
         name: `${firstName.value} ${lastName.value}`,
         email: email.value,
-        phone: phoneNumber.value,
-        dob: dob.value,
+        phoneNumber: phoneNumber.value,
+        date_of_birth: dob.value,
         gender: gender.value,
         gym_id: Number(selectedGym.value), // Since selectedGym stores the ID directly from the updated v-select:
         password: password.value,
@@ -95,7 +95,7 @@ const signUp = async () => {
 
 <template>
     <v-container fluid class="fill-height bg-white pa-0 overflow-hidden">
-        <v-row no-gutters class="fill-height">
+        <v-row no-gutters class="fill-height" style="min-height: 100vh;">
             <!-- Left Column: Visual Impact -->
             <v-col cols="12" md="5" class="d-none d-md-flex">
                 <v-img src="/images/img2-landscape.jpg" :aspect-ratio="16 / 9" cover class="h-100 position-relative">
@@ -109,12 +109,17 @@ const signUp = async () => {
             <v-col cols="12" md="7" class="d-flex align-center justify-center bg-white pa-4 pa-md-16 overflow-y-auto">
                 <v-card width="100%" max-width="640" min-height="850" border rounded="xl" elevation="0"
                     class="bg-white pa-8 pa-md-12 d-flex flex-column justify-center">
+                    <v-btn variant="plain" color="blue-grey-darken-1" class="font-weight-black pa-0 mb-8 align-self-start text-uppercase"
+                        @click="router.push('/')" :ripple="false" prepend-icon="mdi-chevron-left" rounded="0"
+                        style="letter-spacing: 1px; font-size: 14px;">
+                        BACK TO HOME
+                    </v-btn>
                     <v-form ref="form" @submit.prevent="signUp">
-                        <h1 class="text-h5 font-weight-black text-black mb-2 text-uppercase text-center"
-                            style="letter-spacing: -1px;">
+                        <h1 class="text-h4 font-weight-black text-blue-grey-darken-4 mb-2 text-uppercase"
+                            style="letter-spacing: -1px; font-family: 'Oswald', sans-serif !important;">
                             Create Account
                         </h1>
-                        <p class="text-body-1 text-grey-darken-1 mb-8 text-center">
+                        <p class="text-body-1 text-blue-grey-darken-1 mb-8">
                             Join MacFitness and start your transformation today.
                         </p>
 
@@ -217,8 +222,8 @@ const signUp = async () => {
                         <v-alert v-if="error" type="error" variant="tonal" class="mb-4" density="compact">
                             {{ error }}
                         </v-alert>
-                        <v-btn block size="large" color="#ee6909" class="text-black font-weight-bold mb-6"
-                            :loading="loading" type="submit" height="54" rounded="lg" elevation="0">
+                        <v-btn variant="tonal"  width="100%" color="#ee6909" class="text-black font-weight-bold mb-6"
+                            :loading="loading" type="submit" height="45" rounded="lg" elevation="0">
                             CREATE ACCOUNT
                         </v-btn>
 

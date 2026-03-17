@@ -18,7 +18,7 @@ const password = ref(null)
 const visible = ref(false)
 const form = ref(null); // Reference to the v-form component
 
-const handlelogin = async () => {
+async function handlelogin() {
     // 1. Check if Vuetify validation rules pass
     const { valid } = await form.value.validate();
     if (!valid) return;
@@ -34,7 +34,7 @@ const handlelogin = async () => {
             password: password.value,
         });
 
-        // 4. Success! Redirect
+        // 4. Success? --> Redirect
         router.push('/homepage');
     } catch (err) {
         // Error is already reactive in the 'error' ref from useAuth
@@ -45,10 +45,10 @@ const handlelogin = async () => {
 
 <template>
     <v-container fluid class="fill-height bg-white pa-0 overflow-hidden">
-        <v-row no-gutters class="fill-height">
+        <v-row no-gutters class="fill-height" style="min-height: 100vh;">
             <!-- Left Column: Visual Impact -->
             <v-col cols="12" md="5" class="d-none d-md-flex">
-                <v-img src="/images/img6-landscape.jpg" cover class="h-100vh position-relative">
+                <v-img src="/images/img6-landscape.jpg" :aspect-ratio="16 / 9" cover class="h-100 position-relative">
                     <v-overlay model-value="true" persistent contained scrim="black" opacity="0.4"
                         class="d-flex align-center">
                     </v-overlay>
@@ -59,12 +59,17 @@ const handlelogin = async () => {
             <v-col cols="12" md="7" class="d-flex align-center justify-center bg-white pa-4 pa-md-16">
                 <v-card width="100%" max-width="480" min-height="600" border rounded="xl" elevation="0"
                     class="bg-white pa-8 pa-md-12 d-flex flex-column justify-center">
+                    <v-btn variant="plain" color="blue-grey-darken-1" class="font-weight-black pa-0 mb-8 align-self-start text-uppercase"
+                        @click="router.push('/')" :ripple="false" prepend-icon="mdi-chevron-left" rounded="0"
+                        style="letter-spacing: 1px; font-size: 14px;">
+                        BACK TO HOME
+                    </v-btn>
                     <v-form ref="form" @submit.prevent="handlelogin">
-                        <h1 class="text-h5 font-weight-black text-black mb-2 text-uppercase text-center"
-                            style="letter-spacing: -1px;">
+                        <h1 class="text-h4 font-weight-black text-blue-grey-darken-4 mb-2 text-uppercase"
+                            style="letter-spacing: -1px; font-family: 'Oswald', sans-serif !important;">
                             Log In
                         </h1>
-                        <p class="text-body-1 text-grey-darken-1 mb-10 text-center">
+                        <p class="text-body-1 text-blue-grey-darken-1 mb-10">
                             Enter your credentials to access your account
                         </p>
                         <!-- Input Section -->
@@ -92,8 +97,8 @@ const handlelogin = async () => {
                         <v-alert v-if="error" type="error" variant="tonal" class="mb-4" density="compact">
                             {{ error }}
                         </v-alert>
-                        <v-btn block size="large" color="#ee6909" class="text-black font-weight-bold mb-6" type="submit"
-                            height="54" :loading="loading" rounded="lg" elevation="0">
+                        <v-btn variant="tonal"  width="100%" color="#ee6909" class="text-black font-weight-bold mb-6" type="submit"
+                            height="45" :loading="loading" rounded="lg" elevation="0">
                             LOG IN
                         </v-btn>
 

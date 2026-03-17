@@ -72,7 +72,7 @@ onMounted(() => {
             <v-row class="mb-12">
                 <v-col cols="12">
                     <v-chip color="#ee6909" variant="tonal" rounded="pill" class="font-weight-black mb-4 px-4 text-uppercase border-orange-lighten-1 border-opacity-10">LOCATIONS</v-chip>
-                    <h2 class="text-h3 font-weight-black text-white">DISCOVER YOUR <span style="color: #ee6909;">POWER HUB</span></h2>
+                    <h2 class="text-h5 font-weight-black text-white">DISCOVER YOUR <span style="color: #ee6909;">POWER HUB</span></h2>
                     <p class="text-grey-lighten-1 mt-4 text-h6 font-weight-regular" style="max-width: 600px; line-height: 1.6;">
                         One membership. Multiple elite locations. Access the best training floors in Nairobi.
                     </p>
@@ -88,7 +88,7 @@ onMounted(() => {
                             <v-col cols="12" md="5" class="pa-8 pa-md-10 d-flex flex-column">
                                 <div class="d-flex align-center mb-6">
                                     <v-icon color="#ee6909" size="36" class="me-4">mdi-map-marker-radius</v-icon>
-                                    <h3 class="text-h4 font-weight-black text-uppercase" style="letter-spacing: 1px;">{{ loc.name }}</h3>
+                                    <h3 class="text-h6 font-weight-black text-uppercase">{{ loc.name }}</h3>
                                 </div>
 
                                 <v-divider class="mb-6" style="opacity: 0.2;"></v-divider>

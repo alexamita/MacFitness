@@ -26,7 +26,7 @@ const expiryDays = getExpiryDays(userDetails.subscription?.name);
                 <v-col cols="12" md="11" lg="10">
                     <v-row align="center">
                         <v-col cols="12" md="7">
-                            <h1 class="text-h2 font-weight-black text-black text-uppercase mb-2">
+                            <h1 class="text-h5 font-weight-black text-black text-uppercase mb-2">
                                 Karibu, <span style="color: #ee6909;">{{ userName }}</span>!
                             </h1>
 
@@ -80,7 +80,7 @@ const expiryDays = getExpiryDays(userDetails.subscription?.name);
                             <v-card class="pa-10 bg-black text-white text-center" elevation="12" rounded="xl" width="100%" max-width="440">
                                 <v-img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=MACFIT-USER-123456"
                                     max-width="220" class="mx-auto bg-white pa-4 rounded-lg mb-6"></v-img>
-                                <div class="text-subtitle-1 font-weight-black text-uppercase opacity-70 mb-1">Entry Pass</div>
+                                <div class="text-subtitle-1 font-weight-black text-uppercase mb-1">Entry Pass</div>
                                 <div class="text-h6 font-weight-black">#0824-MF</div>
                             </v-card>
                         </v-col>

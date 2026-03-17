@@ -13,7 +13,7 @@ const userDetails = JSON.parse(localStorage.getItem('userSignUpData')) || {}
                                 {{ userDetails.name ? userDetails.name.charAt(0).toUpperCase() : 'M' }}
                             </span>
                         </v-avatar>
-                        <h1 class="text-h4 font-weight-black text-black text-uppercase mb-2" style="letter-spacing: -1px;">
+                        <h1 class="text-h4 font-weight-black text-black text-uppercase mb-2">
                             {{ userDetails.name || 'Member Profile' }}
                         </h1>
                         <v-chip v-if="userDetails.subscription" color="#ee6909" variant="tonal" border size="small" class="font-weight-black text-uppercase px-4">
