@@ -4,187 +4,180 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Equipment;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class EquipmentSeeder extends Seeder
 {
-    /**
-     * Seed equipment inventory across multiple gyms.
-     * Uses updateOrCreate so the seeder can be re-run safely.
-     */
     public function run(): void
     {
-        $equipmentData = [
-            // Gym 1
-            [
-                'name' => 'Power Rack',
-                'usage_notes' => 'Compound lifts: squat, bench, overhead press',
-                'manufacturer_serial_no' => 'IFF-PR-100',
-                'asset_code' => 'GYM1-PR-01',
-                'value' => 185000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 1,
-                'category_id' => 1,
-            ],
-            [
-                'name' => 'Olympic Barbell 20kg',
-                'usage_notes' => 'Strength training and Olympic lifts',
-                'manufacturer_serial_no' => 'IFF-OB-20',
-                'asset_code' => 'GYM1-OB-01',
-                'value' => 35000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 1,
-                'category_id' => 1,
-            ],
-            [
-                'name' => 'Adjustable Bench',
-                'usage_notes' => 'Incline/flat bench press and dumbbell work',
-                'manufacturer_serial_no' => 'IFF-AB-220',
-                'asset_code' => 'GYM1-AB-01',
-                'value' => 42000.00,
-                'status' => Equipment::STATUS_UNDER_MAINTENANCE,
-                'gym_id' => 1,
-                'category_id' => 1,
-            ],
+        $now = Carbon::now();
 
-            // Gym 2
-            [
-                'name' => 'Assault Air Bike',
-                'usage_notes' => 'HIIT conditioning and intervals',
-                'manufacturer_serial_no' => 'PPC-AAB-01',
-                'asset_code' => 'GYM2-AAB-01',
-                'value' => 165000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 2,
-                'category_id' => 3,
-            ],
-            [
-                'name' => 'Concept2 RowErg',
-                'usage_notes' => 'Endurance training and rowing intervals',
-                'manufacturer_serial_no' => 'PPC-C2R-05',
-                'asset_code' => 'GYM2-C2R-01',
-                'value' => 155000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 2,
-                'category_id' => 2,
-            ],
-            [
-                'name' => 'Kettlebell Set (8–32kg)',
-                'usage_notes' => 'Functional training: swings, cleans, presses',
-                'manufacturer_serial_no' => 'PPC-KB-SET',
-                'asset_code' => 'GYM2-KB-01',
-                'value' => 98000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 2,
-                'category_id' => 5,
-            ],
+        // 100 Unique Items mapped to 15 Categories with KES pricing
+        $equipmentPool = [
+            // 1: Strength Training
+            ['name' => 'Monster Power Rack', 'brand' => 'Rogue Fitness', 'cat' => 1, 'price' => 350000],
+            ['name' => 'Olympic Barbell 20kg', 'brand' => 'Eleiko', 'cat' => 1, 'price' => 135000],
+            ['name' => 'Leg Press 45 Degree', 'brand' => 'Hammer Strength', 'cat' => 1, 'price' => 550000],
+            ['name' => 'Dumbbell Set (2-50kg)', 'brand' => 'ZIVA', 'cat' => 1, 'price' => 650000],
+            ['name' => 'Smith Machine', 'brand' => 'Technogym', 'cat' => 1, 'price' => 700000],
+            ['name' => 'Lat Pulldown Machine', 'brand' => 'Life Fitness', 'cat' => 1, 'price' => 450000],
+            ['name' => 'Seated Row', 'brand' => 'Hammer Strength', 'cat' => 1, 'price' => 420000],
 
-            // Gym 3
-            [
-                'name' => 'Yoga Mats (Premium)',
-                'usage_notes' => 'Yoga classes and floor exercises',
-                'manufacturer_serial_no' => 'ZWS-YM-50',
-                'asset_code' => 'GYM3-YM-01',
-                'value' => 50000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 3,
-                'category_id' => 4,
-            ],
-            [
-                'name' => 'Pilates Reformer',
-                'usage_notes' => 'Pilates reformer classes',
-                'manufacturer_serial_no' => 'ZWS-PR-10',
-                'asset_code' => 'GYM3-PR-01',
-                'value' => 650000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 3,
-                'category_id' => 9,
-            ],
-            [
-                'name' => 'Foam Roller Set',
-                'usage_notes' => 'Mobility, recovery, myofascial release',
-                'manufacturer_serial_no' => 'ZWS-FR-SET',
-                'asset_code' => 'GYM3-FR-01',
-                'value' => 24000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 3,
-                'category_id' => 12,
-            ],
+            // 2: Cardio & Endurance
+            ['name' => 'Commercial Treadmill T80', 'brand' => 'Life Fitness', 'cat' => 2, 'price' => 1250000],
+            ['name' => 'Concept2 RowErg', 'brand' => 'Concept2', 'cat' => 2, 'price' => 220000],
+            ['name' => 'StairMaster Gauntlet', 'brand' => 'Core Health', 'cat' => 2, 'price' => 950000],
+            ['name' => 'Spin Bike S11', 'brand' => 'Keiser', 'cat' => 2, 'price' => 320000],
+            ['name' => 'Curve Treadmill', 'brand' => 'Woodway', 'cat' => 2, 'price' => 1500000],
+            ['name' => 'Arc Trainer', 'brand' => 'Cybex', 'cat' => 2, 'price' => 850000],
 
-            // Gym 4
-            [
-                'name' => 'Treadmill (Commercial)',
-                'usage_notes' => 'Cardio training and fat loss',
-                'manufacturer_serial_no' => 'MFD-TM-3000',
-                'asset_code' => 'GYM4-TM-01',
-                'value' => 420000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 4,
-                'category_id' => 2,
-            ],
-            [
-                'name' => 'Elliptical Trainer',
-                'usage_notes' => 'Low-impact cardio conditioning',
-                'manufacturer_serial_no' => 'MFD-ET-1200',
-                'asset_code' => 'GYM4-ET-01',
-                'value' => 280000.00,
-                'status' => Equipment::STATUS_FAULTY,
-                'gym_id' => 4,
-                'category_id' => 2,
-            ],
-            [
-                'name' => 'Cable Crossover Machine',
-                'usage_notes' => 'Strength training: chest fly, rows, triceps',
-                'manufacturer_serial_no' => 'MFD-CC-900',
-                'asset_code' => 'GYM4-CC-01',
-                'value' => 310000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 4,
-                'category_id' => 1,
-            ],
+            // 3: HIIT & Circuit
+            ['name' => 'Assault Air Bike', 'brand' => 'Assault Fitness', 'cat' => 3, 'price' => 145000],
+            ['name' => 'SkiErg', 'brand' => 'Concept2', 'cat' => 3, 'price' => 185000],
+            ['name' => 'Sled Prowler', 'brand' => 'Rogue Fitness', 'cat' => 3, 'price' => 75000],
+            ['name' => 'Battle Ropes (50ft)', 'brand' => 'Living Fit', 'cat' => 3, 'price' => 25000],
+            ['name' => 'Plyo Box Set (Soft)', 'brand' => 'Rogue Fitness', 'cat' => 3, 'price' => 85000],
+            ['name' => 'Agility Ladder', 'brand' => 'SKLZ', 'cat' => 3, 'price' => 6500],
 
-            // Gym 5
-            [
-                'name' => 'Leg Press Machine',
-                'usage_notes' => 'Lower-body strength development',
-                'manufacturer_serial_no' => 'ESCH-LP-700',
-                'asset_code' => 'GYM5-LP-01',
-                'value' => 360000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 5,
-                'category_id' => 1,
-            ],
-            [
-                'name' => 'Physio Treatment Table',
-                'usage_notes' => 'Rehab assessment and physiotherapy sessions',
-                'manufacturer_serial_no' => 'ESCH-PT-20',
-                'asset_code' => 'GYM5-PT-01',
-                'value' => 120000.00,
-                'status' => Equipment::STATUS_ACTIVE,
-                'gym_id' => 5,
-                'category_id' => 12,
-            ],
-            [
-                'name' => 'Resistance Bands Set',
-                'usage_notes' => 'Rehab, activation, mobility drills',
-                'manufacturer_serial_no' => 'ESCH-RB-SET',
-                'asset_code' => 'GYM5-RB-01',
-                'value' => 18000.00,
-                'status' => Equipment::STATUS_DECOMMISSIONED,
-                'gym_id' => 5,
-                'category_id' => 4,
-            ],
+            // 4: Yoga & Mobility
+            ['name' => 'Yoga Mat Premium', 'brand' => 'Manduka', 'cat' => 4, 'price' => 18000],
+            ['name' => 'Yoga Block (Cork)', 'brand' => 'Gaiam', 'cat' => 4, 'price' => 4500],
+            ['name' => 'Yoga Wheel', 'brand' => 'UpCircleSeven', 'cat' => 4, 'price' => 9500],
+            ['name' => 'Stretching Strap', 'brand' => 'OPTP', 'cat' => 4, 'price' => 3500],
+            ['name' => 'Bolster Cushion', 'brand' => 'Hugger Mugger', 'cat' => 4, 'price' => 12000],
+
+            // 5: CrossFit & Functional
+            ['name' => 'Gymnastic Rings (Wood)', 'brand' => 'Rogue Fitness', 'cat' => 5, 'price' => 18000],
+            ['name' => 'Kettlebell Set (8-32kg)', 'brand' => 'Kettlebell Kings', 'cat' => 5, 'price' => 195000],
+            ['name' => 'Wall Ball (9kg)', 'brand' => 'Rogue Fitness', 'cat' => 5, 'price' => 17500],
+            ['name' => 'Sandbag (Trainable)', 'brand' => 'Brute Force', 'cat' => 5, 'price' => 28000],
+            ['name' => 'GHD Machine', 'brand' => 'Rogue Fitness', 'cat' => 5, 'price' => 145000],
+
+            // 6: Combat Sports
+            ['name' => 'Heavy Bag (100lb)', 'brand' => 'Everlast', 'cat' => 6, 'price' => 65000],
+            ['name' => 'Thai Pads (Pair)', 'brand' => 'Fairtex', 'cat' => 6, 'price' => 22000],
+            ['name' => 'Grappling Dummy', 'brand' => 'Century', 'cat' => 6, 'price' => 55000],
+            ['name' => 'Speed Bag Platform', 'brand' => 'Title Boxing', 'cat' => 6, 'price' => 45000],
+            ['name' => 'Boxing Ring (Floor)', 'brand' => 'Rival', 'cat' => 6, 'price' => 850000],
+
+            // 7: Personal Training
+            ['name' => 'Adjustable Dumbbells', 'brand' => 'PowerBlock', 'cat' => 7, 'price' => 75000],
+            ['name' => 'TRX Pro4 System', 'brand' => 'TRX', 'cat' => 7, 'price' => 38000],
+            ['name' => 'Portable Training Bench', 'brand' => 'Bowflex', 'cat' => 7, 'price' => 55000],
+            ['name' => 'Fitness Tracking Kiosk', 'brand' => 'Fitbench', 'cat' => 7, 'price' => 280000],
+
+            // 8: Aquatics
+            ['name' => 'Pool Pace Clock', 'brand' => 'Competitor', 'cat' => 8, 'price' => 95000],
+            ['name' => 'Aqua Dumbbells (Pair)', 'brand' => 'TYR', 'cat' => 8, 'price' => 12000],
+            ['name' => 'Lane Rope Reel', 'brand' => 'AntiWave', 'cat' => 8, 'price' => 185000],
+            ['name' => 'Aquatic Treadmill', 'brand' => 'HydroWorx', 'cat' => 8, 'price' => 2200000],
+            ['name' => 'Kickboard Stack', 'brand' => 'Speedo', 'cat' => 8, 'price' => 35000],
+
+            // 9: Pilates & Core
+            ['name' => 'Pilates Reformer V2', 'brand' => 'Merrithew', 'cat' => 9, 'price' => 650000],
+            ['name' => 'Pilates Cadillac', 'brand' => 'Stott Pilates', 'cat' => 9, 'price' => 850000],
+            ['name' => 'Wunda Chair', 'brand' => 'Balanced Body', 'cat' => 9, 'price' => 195000],
+            ['name' => 'Stability Ball (65cm)', 'brand' => 'TheraBand', 'cat' => 9, 'price' => 6500],
+
+            // 10: Senior Fitness
+            ['name' => 'Low-Impact Stepper', 'brand' => 'Technogym', 'cat' => 10, 'price' => 320000],
+            ['name' => 'Resistance Chair', 'brand' => 'VQ ActionCare', 'cat' => 10, 'price' => 55000],
+            ['name' => 'Balance Pad', 'brand' => 'Airex', 'cat' => 10, 'price' => 11000],
+
+            // 11: Youth Athletics
+            ['name' => 'Junior Olympic Bar', 'brand' => 'Rogue Fitness', 'cat' => 11, 'price' => 45000],
+            ['name' => 'Youth Plyo Box', 'brand' => 'Rep Fitness', 'cat' => 11, 'price' => 35000],
+            ['name' => 'Agility Hurdles', 'brand' => 'SKLZ', 'cat' => 11, 'price' => 14000],
+
+            // 12: Recovery & Wellness
+            ['name' => 'Infrared Sauna (4-Person)', 'brand' => 'Clearlight', 'cat' => 12, 'price' => 950000],
+            ['name' => 'Commercial Cold Plunge', 'brand' => 'Plunge', 'cat' => 12, 'price' => 750000],
+            ['name' => 'Hypervolt 2 Pro', 'brand' => 'Hyperice', 'cat' => 12, 'price' => 65000],
+            ['name' => 'Compression Boots', 'brand' => 'Normatec', 'cat' => 12, 'price' => 145000],
+            ['name' => 'Vibration Plate', 'brand' => 'Power Plate', 'cat' => 12, 'price' => 550000],
+
+            // 13: Nutrition Coaching
+            ['name' => 'InBody 270 Body Comp', 'brand' => 'InBody', 'cat' => 13, 'price' => 850000],
+            ['name' => 'Medical Grade Tape', 'brand' => 'Seca', 'cat' => 13, 'price' => 3500],
+            ['name' => 'Skinfold Calipers', 'brand' => 'Harpenden', 'cat' => 13, 'price' => 55000],
+
+            // 14: Dance Fitness
+            ['name' => 'Dance Floor Mirror', 'brand' => 'Glassless Mirror', 'cat' => 14, 'price' => 125000],
+            ['name' => 'Wall-Mounted Barre', 'brand' => 'Vita Vibe', 'cat' => 14, 'price' => 75000],
+            ['name' => 'PA Sound System', 'brand' => 'JBL Pro', 'cat' => 14, 'price' => 220000],
+
+            // 15: Open Gym Access
+            ['name' => 'Digital Locker Bank', 'brand' => 'Salsbury', 'cat' => 15, 'price' => 450000],
+            ['name' => 'Elkay Refill Station', 'brand' => 'Elkay', 'cat' => 15, 'price' => 280000],
+            ['name' => 'AED Plus Defibrillator', 'brand' => 'Zoll', 'cat' => 15, 'price' => 320000],
+            ['name' => 'Sanitization Stand', 'brand' => 'Purell', 'cat' => 15, 'price' => 45000],
         ];
 
-        foreach ($equipmentData as $equipment) {
-            Equipment::updateOrCreate(
-                // Unique identifier for equipment record (globally unique)
-                ['manufacturer_serial_no' => $equipment['manufacturer_serial_no']],
-
-                // Fields to insert/update
-                $equipment
-            );
+        // Ensure we hit exactly 100 unique items by padding with generic variations
+        $brands = ['Matrix', 'Technogym', 'Star Trac', 'Body-Solid', 'Precor'];
+        while (count($equipmentPool) < 100) {
+            $cat = rand(1, 15);
+            $equipmentPool[] = [
+                'name' => 'Utility Accessory ' . (count($equipmentPool) + 1),
+                'brand' => $brands[array_rand($brands)],
+                'cat' => $cat,
+                'price' => rand(25000, 300000)
+            ];
         }
 
-        $this->command->info('Equipment seeded successfully.');
+        $statuses = ['active', 'active', 'active', 'under_maintenance', 'faulty', 'decommissioned'];
+        $locations = ['Level 1 - Main', 'Level 2 - Studio', 'North Wing', 'South Wing', 'Mezzanine', 'Outdoor Deck'];
+
+        for ($gymId = 1; $gymId <= 5; $gymId++) {
+            foreach ($equipmentPool as $index => $item) {
+
+                // Realism: Weighted Status Logic
+                $rand = rand(1, 100);
+                if ($rand <= 85) $status = 'active';
+                elseif ($rand <= 92) $status = 'under_maintenance';
+                elseif ($rand <= 98) $status = 'faulty';
+                else $status = 'decommissioned';
+
+                $notes = null;
+                $hazard = false;
+
+                if ($status === 'under_maintenance') {
+                    $notes = 'Bimonthly preventative maintenance check.';
+                } elseif ($status === 'faulty') {
+                    $notes = 'Reported mechanical noise or wear. Inspection pending.';
+                    $hazard = rand(1, 10) > 7;
+                } elseif ($status === 'decommissioned') {
+                    $notes = 'End of lifecycle. Scheduled for salvage/removal.';
+                }
+
+                $purchaseDate = $now->copy()->subDays(rand(30, 1800));
+                $lastService = $now->copy()->subDays(rand(1, 180));
+
+                Equipment::updateOrCreate(
+                    ['manufacturer_serial_no' => strtoupper(substr($item['brand'], 0, 3)) . "-" . Str::random(6) . "-G" . $gymId . "-" . $index],
+                    [
+                        'gym_id' => $gymId,
+                        'category_id' => $item['cat'],
+                        'name' => $item['name'],
+                        'brand' => $item['brand'],
+                        'model_number' => 'SERIES-' . rand(1, 10),
+                        'usage_notes' => $notes,
+                        'asset_code' => "G{$gymId}-" . strtoupper(substr(Str::slug($item['name']), 0, 4)) . "-" . str_pad($index + 1, 3, '0', STR_PAD_LEFT),
+                        'purchase_price' => $item['price'],
+                        'purchase_date' => $purchaseDate,
+                        'warranty_expiration' => $purchaseDate->copy()->addYears(rand(1, 3)),
+                        'status' => $status,
+                        'is_safety_hazard' => $hazard,
+                        'last_serviced_at' => $lastService,
+                        'next_service_due_at' => $lastService->copy()->addDays(180),
+                        'service_interval_days' => 180,
+                        'floor_location' => $locations[array_rand($locations)],
+                    ]
+                );
+            }
+        }
+
+        $this->command->info('Seeded 500 items across 15 categories with realistic Kenyan Shilling (KES) pricing.');
     }
 }

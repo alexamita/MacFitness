@@ -13,7 +13,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        // Eager loading the 'gym' and 'role' relationships
+        $users = User::with(['gym', 'role'])->get();
         return response()->json($users);
     }
 
@@ -31,13 +32,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'=>'required|string',
-            'email'=>'required|email|unique:users,email',
-            'phoneNumber'=>'nullable|string',
-            'gender'=>'nullable|string',
-            'dob'=>'nullable|string',
-            'gymLocation'=>'nullable|string',
-            'role_id'=>'required|integer|exists:roles,id',
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'phoneNumber' => 'nullable|string',
+            'gender' => 'nullable|string',
+            'date_of_birth' => 'nullable|string',
+            'gym_id' => 'nullable|string',
+            'role_id' => 'required|integer|exists:roles,id',
         ]);
 
         $user = new User();
@@ -47,8 +48,8 @@ class UserController extends Controller
         $user->role_id = $validated['role_id'];
         $user->phoneNumber = $validated['phoneNumber'];
         $user->gender = $validated['gender'];
-        $user->dob = $validated['dob'];
-        $user->gym_location = $validated['gymLocation'];
+        $user->date_of_birth = $validated['date_of_birth'];
+        $user->gym_id = $validated['gym_id'];
         $user->is_active = true; //to delete later after email verification
 
         $user->save();
@@ -77,7 +78,38 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // 1. Find the user first so we can use their ID in validation
+        $user = User::findOrFail($id);
+
+        // 2. VALIDATION: Add the ID to the unique rule to ignore the current user
+        $validated = $request->validate([
+            'name' => 'nullable|string',
+            // The ',email,'.$id tells Laravel: "Unique in users table, except for this user's ID"
+            'email' => 'nullable|email|unique:users,email,' . $id,
+            'phoneNumber' => 'nullable|string',
+            'gender' => 'nullable|string',
+            'date_of_birth' => 'nullable|string',
+            'gym_id' => 'nullable',
+            'role_id' => 'nullable|integer|exists:roles,id',
+        ]);
+
+        // 3. Mapping the validated data to model
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->role_id = $validated['role_id'];
+        $user->phoneNumber = $validated['phoneNumber'];
+        $user->gender = $validated['gender'];
+        $user->date_of_birth = $validated['date_of_birth'];
+        $user->gym_id = $validated['gym_id'];
+
+        // Safety check: Only change password if absolutely need to reset it here
+        // $user->password = Hash::make('Qwerty1234');
+
+        $user->is_active = true; //to delete later after email verification
+
+        $user->save();
+
+        return response()->json(['message' => 'User updated successfully.'], 200);
     }
 
     /**

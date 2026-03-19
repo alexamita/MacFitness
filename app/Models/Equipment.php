@@ -1,90 +1,132 @@
 <?php
-// Equipment model representing gym equipment that can be used in bundles and tracked for maintenance and inventory purposes, associated with a specific gym
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 /**
  * Equipment Model
  *
- * Represents a physical piece of gym equipment.
- * Each equipment item:
- * - Belongs to one gym
- * - Belongs to one global category
- * - Has a globally unique manufacturer serial number
- * - May have a gym-specific internal asset code
+ * Represents a physical piece of gym equipment with full lifecycle tracking.
  */
 class Equipment extends Model
 {
+    use HasFactory, SoftDeletes;
+
     /**
      * Equipment status constants.
-     * Prevents magic strings across the application.
      */
     public const STATUS_ACTIVE = 'active';
     public const STATUS_UNDER_MAINTENANCE = 'under_maintenance';
     public const STATUS_FAULTY = 'faulty';
-    public const STATUS_DECOMMISSIONED = 'decommisioned';
+    public const STATUS_DECOMMISSIONED = 'decommissioned';
 
     /**
      * Mass assignable attributes.
      */
     protected $fillable = [
+        "gym_id",
+        "category_id",
         "name",
+        "brand",
+        "model_number",
         "usage_notes",
         "manufacturer_serial_no",
         "asset_code",
-        "value",
+        "purchase_price",
+        "purchase_date",
+        "warranty_expiration",
         "status",
-        "gym_id",
-        "category_id",
+        "is_safety_hazard",
+        "last_serviced_at",
+        "next_service_due_at",
+        "service_interval_days",
+        "floor_location",
     ];
 
     /**
      * Attribute casting.
+     * Ensures dates are Carbon instances and booleans are true/false.
      */
     protected $casts = [
-        'value' => 'decimal:2',
+        'purchase_price' => 'decimal:2',
+        'purchase_date' => 'date',
+        'warranty_expiration' => 'date',
+        'last_serviced_at' => 'date',
+        'next_service_due_at' => 'date',
+        'is_safety_hazard' => 'boolean',
+        'service_interval_days' => 'integer',
     ];
 
     /**---------------
      * Relationships
     -----------------*/
-    /**
-     * Each equipment item belongs to one gym.
-     */
+
     public function gym()
     {
         return $this->belongsTo(Gym::class);
     }
 
-    /**
-     * Each equipment item belongs to one category.
-     */
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-
     /**--------------
-     *  Query Scopes
+     * Query Scopes
     -----------------*/
-    /**
-     * Scope for active equipment.
-     */
+
     public function scopeActive($query)
     {
         return $query->where('status', self::STATUS_ACTIVE);
     }
 
-    /**
-     * Scope for faulty equipment.
-     */
     public function scopeFaulty($query)
     {
         return $query->where('status', self::STATUS_FAULTY);
+    }
+
+    public function scopeMaintenanceOverdue($query)
+    {
+        return $query->where('next_service_due_at', '<', now())
+            ->where('status', '!=', self::STATUS_DECOMMISSIONED);
+    }
+
+    public function scopeSafetyHazards($query)
+    {
+        return $query->where('is_safety_hazard', true);
+    }
+
+    /**--------------
+     * Accessors / Helpers
+    -----------------*/
+
+    /**
+     * Check if the warranty has expired.
+     */
+    public function isWarrantyExpired(): bool
+    {
+        if (!$this->warranty_expiration) {
+            return false;
+        }
+
+        // Explicitly wrap in Carbon to ensure isPast() is available
+        return Carbon::parse($this->warranty_expiration)->isPast();
+    }
+
+    /**
+     * Check if service is overdue.
+     */
+    public function isServiceOverdue(): bool
+    {
+        if (!$this->next_service_due_at) {
+            return false;
+        }
+
+        // Explicitly wrap in Carbon
+        return Carbon::parse($this->next_service_due_at)->isPast();
     }
 }

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verify-otp', [UserOtpController::class,'verifyOtp']);
+Route::get('/getGyms', [GymController::class, 'readAllGyms']);
 
 // Email verification routes
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailContoller::class, 'verifyEmail'])
@@ -55,7 +56,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Gym Routes
     Route::post('/saveGym', [GymController::class, 'createGym']);
-    Route::get('/getGyms', [GymController::class, 'readAllGyms']);
     Route::get('/getGym/{gym}', [GymController::class, 'readGym']);
     Route::post('/updateGym/{gym}', [GymController::class, 'updateGym']);
     Route::delete('/deleteGym/{gym}', [GymController::class, 'deleteGym']);

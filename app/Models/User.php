@@ -95,7 +95,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected function isAdmin(): Attribute
     {
-        return Attribute::make(get: fn () => $this->role?->slug === 'admin');
+        return Attribute::make(get: fn () => in_array($this->role?->slug, ['admin', 'super_admin']));
     }
 
     /**
