@@ -101,6 +101,22 @@ class RoleController extends Controller
         }
     }
 
+    // Restore role
+    public function restoreRole(string $id){
+        try{
+            $role = Role::withTrashed()->findOrFail($id);
+            $this->authorize('update', $role); // Or a specific restore permission
+            $role->restore();
+            return response("Role restored successfully", 200);
+        }
+        catch(\Exception $exception){
+            return response()->json([
+                'error'=> 'Failed to restore the role',
+                'message'=> $exception->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Generate a unique slug for roles table.
      */

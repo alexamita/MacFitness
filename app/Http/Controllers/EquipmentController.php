@@ -103,4 +103,20 @@ class EquipmentController extends Controller
         }
     }
 
+    // Restore the specified equipment.
+    public function restoreEquipment(string $id){
+        try{
+            $equipment = Equipment::withTrashed()->findOrFail($id);
+            $this->authorize('update', $equipment);
+            $equipment->restore();
+            return response("Equipment restored successfully", 200);
+        }
+        catch(\Exception $exception){
+            return response()->json([
+                'error'=> 'Failed to restore the equipment',
+                'message'=> $exception->getMessage()
+            ], 500);
+        }
+    }
+
 }

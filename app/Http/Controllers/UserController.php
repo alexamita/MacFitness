@@ -13,8 +13,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        // Eager loading the 'gym' and 'role' relationships
-        $users = User::with(['gym', 'role'])->get();
+        // Eager loading the 'gym' and 'role' relationships, including soft-deleted users
+        $users = User::withTrashed()->with(['gym', 'role'])->get();
         return response()->json($users);
     }
 
@@ -54,7 +54,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['message' => 'Role Saved Successfully.'], 200);
+        return response()->json(['message' => 'User Saved Successfully.'], 200);
     }
 
     /**
@@ -79,7 +79,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         // 1. Find the user first so we can use their ID in validation
-        $user = User::findOrFail($id);
+        $user = User::withTrashed()->findOrFail($id);
 
         // 2. VALIDATION: Add the ID to the unique rule to ignore the current user
         $validated = $request->validate([
@@ -117,6 +117,20 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return response()->json(['message' => 'User deactivated successfully.'], 200);
+    }
+
+    /**
+     * Restore the specified resource.
+     */
+    public function restore(string $id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
+
+        return response()->json(['message' => 'User activated successfully.'], 200);
     }
 }

@@ -38,14 +38,17 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route to delete a user, allowing authenticated users to remove their account from the system
     Route::delete('/deleteUser', [AuthController::class, 'deleteUser']);
 
+    // User Routes
+    Route::resource('users', UserController::class);
+    Route::post('/users/{user}/restore', [UserController::class, 'restore']);
+
     // Role Routes
     Route::post('/saveRole', [RoleController::class, 'createRole']);
     Route::get('/getRoles', [RoleController::class, 'readAllRoles']);
     Route::get('/getRole/{role}', [RoleController::class, 'readRole']);
     Route::post('/updateRole/{role}', [RoleController::class, 'updateRole']);
     Route::delete('/deleteRole/{role}', [RoleController::class, 'deleteRole']);
-
-    Route::resource('users', UserController::class);
+    Route::post('/restoreRole/{id}', [RoleController::class, 'restoreRole']);
 
     // Category Routes
     Route::post('/saveCategory', [CategoryController::class, 'createCategory']);
@@ -59,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getGym/{gym}', [GymController::class, 'readGym']);
     Route::post('/updateGym/{gym}', [GymController::class, 'updateGym']);
     Route::delete('/deleteGym/{gym}', [GymController::class, 'deleteGym']);
+    Route::post('/restoreGym/{id}', [GymController::class, 'restoreGym']);
 
     // Bundle Routes
     Route::post('/saveBundle', [BundleController::class, 'createBundle']);
@@ -73,6 +77,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getEquipment/{equipment}', [EquipmentController::class, 'readEquipment']);
     Route::post('/updateEquipment/{equipment}', [EquipmentController::class, 'updateEquipment']);
     Route::delete('/deleteEquipment/{equipment}', [EquipmentController::class, 'deleteEquipment']);
+    Route::post('/restoreEquipment/{id}', [EquipmentController::class, 'restoreEquipment']);
 
     // Subscription routes
     Route::post('/saveSubscription', [SubscriptionController::class, 'createSubscription']);

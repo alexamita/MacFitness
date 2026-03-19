@@ -94,4 +94,20 @@ class GymController extends Controller
             ], 500);
         }
     }
+
+    // Restore gym
+    public function restoreGym(string $id){
+        try {
+            $gym = Gym::withTrashed()->findOrFail($id);
+            $this->authorize('update', $gym);
+            $gym->restore();
+            return response()->json(['message' => 'Gym restored successfully'], 200);
+        }
+        catch (\Exception $exception) {
+            return response()->json([
+                'error'   => 'Failed to restore the gym',
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
 }
