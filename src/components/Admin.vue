@@ -94,7 +94,14 @@ const showAddUserDialog = ref(false)
 const showAddRoleDialog = ref(false)
 const showAddEquipmentDialog = ref(false)
 const showAddGymDialog = ref(false)
-// const deleteDialog = ref(false); // To control the visibility of your confirmation modal
+const showDeleteDialog = ref(false);
+const deleteConfig = ref({
+    title: '',
+    message: '',
+    confirmText: 'DELETE',
+    color: 'error',
+    action: null
+});
 
 /**
  * MODE TRACKING
@@ -238,18 +245,96 @@ function editUser(data) {
     showAddUserDialog.value = true;
 }
 
-// async function handleDeleteUser(){
-//     // 1. Guard clause: Ensure we actually have an ID to delete
-//     if (!currentId.value) return;
-//     loading.value = true;
-//     error.value = null; // Clear previous errors before starting
-//     try {
-//         await api.delete(`users/${currentId.value}`, getAuthHeader());
-//         await fetchUsers(); // Refresh list after success
-//     } catch (err) {
-//         error.value = 'Failed to delete user.';
-//     }
-// }
+// Generic Delete/Action Confirmation
+function confirmAction(config) {
+    deleteConfig.value = {
+        title: config.title || 'Confirm Action',
+        message: config.message || 'Are you sure you want to proceed?',
+        confirmText: config.confirmText || 'CONFIRM',
+        color: config.color || 'error',
+        action: config.action
+    };
+    showDeleteDialog.value = true;
+}
+
+async function handleActionExec() {
+    if (deleteConfig.value.action) {
+        loading.value = true;
+        try {
+            await deleteConfig.value.action();
+            showDeleteDialog.value = false;
+        } catch (err) {
+            error.value = err.response?.data?.message || 'Action failed.';
+        } finally {
+            loading.value = false;
+        }
+    }
+}
+
+async function deactivateUser(user) {
+    confirmAction({
+        title: 'DEACTIVATE USER',
+        message: `Are you sure you want to deactivate ${user.name}? They will no longer be able to log in.`,
+        confirmText: 'DEACTIVATE',
+        color: 'error',
+        action: async () => {
+            await api.delete(`users/${user.id}`, getAuthHeader());
+            await fetchUsers();
+        }
+    });
+}
+
+async function activateUser(user) {
+    confirmAction({
+        title: 'ACTIVATE USER',
+        message: `Restore access for ${user.name}?`,
+        confirmText: 'ACTIVATE',
+        color: 'success',
+        action: async () => {
+            await api.post(`users/${user.id}/restore`, {}, getAuthHeader());
+            await fetchUsers();
+        }
+    });
+}
+
+async function deleteRole(role) {
+    confirmAction({
+        title: 'DELETE ROLE',
+        message: `Permanently delete the "${role.name}" role? This cannot be undone if users are still assigned.`,
+        confirmText: 'DELETE',
+        color: 'error',
+        action: async () => {
+            await api.delete(`deleteRole/${role.id}`, getAuthHeader());
+            await fetchRoles();
+        }
+    });
+}
+
+async function deleteEquipment(item) {
+    confirmAction({
+        title: 'DELETE EQUIPMENT',
+        message: `Remove "${item.name}" (${item.assetCode}) from inventory?`,
+        confirmText: 'DELETE',
+        color: 'error',
+        action: async () => {
+            await api.delete(`deleteEquipment/${item.id}`, getAuthHeader());
+            await fetchEquipment();
+        }
+    });
+}
+
+async function deleteGym(gym) {
+    confirmAction({
+        title: 'DELETE GYM LOCATION',
+        message: `Remove "${gym.name}"? This will affect all associated users and equipment.`,
+        confirmText: 'DELETE',
+        color: 'error',
+        action: async () => {
+            await api.delete(`deleteGym/${gym.id}`, getAuthHeader());
+            await fetchGyms();
+        }
+    });
+}
 // 2. ROLES LOGIC
 async function fetchRoles() {
     try {
@@ -515,10 +600,10 @@ onMounted(() => {
                                                 <v-btn v-if="user?.deleted_at == null" size="small" color="primary" variant="tonal" rounded="pill" class="px-3" @click="editUser(user)" title="Edit User">
                                                     <v-icon start icon="mdi-pencil" size="12"></v-icon> EDIT
                                                 </v-btn>
-                                                <v-btn v-if="user?.deleted_at == null" size="small" color="error" variant="tonal" rounded="pill" class="px-3" title="Deactivate">
+                                                <v-btn v-if="user?.deleted_at == null" size="small" color="error" variant="tonal" rounded="pill" class="px-3" title="Deactivate" @click="deactivateUser(user)">
                                                     <v-icon start icon="mdi-account-cancel" size="12"></v-icon> DEACTIVATE
                                                 </v-btn>
-                                                <v-btn v-if="user?.deleted_at !== null" size="x-small" color="warning" variant="tonal" rounded="pill" class="px-3" title="Activate">
+                                                <v-btn v-if="user?.deleted_at !== null" size="x-small" color="success" variant="tonal" rounded="pill" class="px-3" title="Activate" @click="activateUser(user)">
                                                     <v-icon start icon="mdi-account-check" size="12"></v-icon> ACTIVATE
                                                 </v-btn>
                                             </div>
@@ -568,9 +653,14 @@ onMounted(() => {
                                         <td class="text-grey-darken-1 text-caption py-4 px-4">{{ role.description }}</td>
                                         <td class="font-weight-bold text-uppercase py-4 px-4 text-caption">{{ role.noOfUsers }}</td>
                                         <td class="text-right py-4 px-4">
-                                            <v-btn size="x-small" color="success" variant="tonal" rounded="pill" class="px-3" @click="editRole(role)">
-                                                <v-icon start icon="mdi-pencil" size="12"></v-icon> EDIT
-                                            </v-btn>
+                                            <div class="d-flex justify-end ga-2">
+                                                <v-btn size="x-small" color="success" variant="tonal" rounded="pill" class="px-3" @click="editRole(role)">
+                                                    <v-icon start icon="mdi-pencil" size="12"></v-icon> EDIT
+                                                </v-btn>
+                                                <v-btn size="x-small" color="error" variant="tonal" rounded="pill" class="px-3" @click="deleteRole(role)">
+                                                    <v-icon start icon="mdi-delete" size="12"></v-icon> DELETE
+                                                </v-btn>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -640,7 +730,7 @@ onMounted(() => {
                                                 <v-btn size="x-small" color="primary" variant="tonal" rounded="pill" class="px-3" @click="editEquipment(item)">
                                                     <v-icon start icon="mdi-pencil" size="12"></v-icon> EDIT
                                                 </v-btn>
-                                                <v-btn size="x-small" color="error" variant="tonal" rounded="pill" class="px-3">
+                                                <v-btn size="x-small" color="error" variant="tonal" rounded="pill" class="px-3" @click="deleteEquipment(item)">
                                                     <v-icon start icon="mdi-delete" size="12"></v-icon> DELETE
                                                 </v-btn>
                                             </div>
@@ -700,9 +790,14 @@ onMounted(() => {
                                         <td class="text-grey-darken-1 text-caption py-4 px-4">{{ gym.phone_number }}</td>
                                         <td class="py-4 px-4 text-caption text-truncate" style="max-width: 200px;">{{ gym.description }}</td>
                                         <td class="text-right py-4 px-4">
-                                            <v-btn size="x-small" color="success" variant="tonal" rounded="pill" class="px-3" @click="editGym(gym)">
-                                                <v-icon start icon="mdi-pencil" size="12"></v-icon> EDIT
-                                            </v-btn>
+                                            <div class="d-flex justify-end ga-2">
+                                                <v-btn size="x-small" color="success" variant="tonal" rounded="pill" class="px-3" @click="editGym(gym)">
+                                                    <v-icon start icon="mdi-pencil" size="12"></v-icon> EDIT
+                                                </v-btn>
+                                                <v-btn size="x-small" color="error" variant="tonal" rounded="pill" class="px-3" @click="deleteGym(gym)">
+                                                    <v-icon start icon="mdi-delete" size="12"></v-icon> DELETE
+                                                </v-btn>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -759,6 +854,25 @@ onMounted(() => {
                 <v-btn variant="text" @click="close()">cancel</v-btn>
                 <v-btn color="#ee6909" variant="flat" class="px-8 font-weight-black" rounded="lg" :loading="loading"
                     @click="addUser()">SAVE</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <!-- Confirmation Dialog -->
+    <v-dialog v-model="showDeleteDialog" max-width="400">
+        <v-card class="rounded-xl pa-4 overflow-hidden">
+            <v-card-title class="text-h6 font-weight-black text-uppercase d-flex align-center">
+                <v-icon start :color="deleteConfig.color" icon="mdi-alert-circle-outline" class="mr-2"></v-icon>
+                {{ deleteConfig.title }}
+            </v-card-title>
+            <v-card-text class="text-body-1 py-4 text-grey-darken-2">
+                {{ deleteConfig.message }}
+            </v-card-text>
+            <v-card-actions class="pt-4">
+                <v-spacer></v-spacer>
+                <v-btn variant="text" color="grey-darken-1" class="font-weight-bold" @click="showDeleteDialog = false">CANCEL</v-btn>
+                <v-btn :color="deleteConfig.color" variant="flat" class="px-6 font-weight-black text-white" rounded="lg" :loading="loading" @click="handleActionExec">
+                    {{ deleteConfig.confirmText }}
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
