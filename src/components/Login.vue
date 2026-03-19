@@ -5,7 +5,7 @@ import { useAuth } from "@/services/auth";
 
 const router = useRouter();
 // Destructuring custom auth service to get the login method and status states
-const { login, loading, error } = useAuth()
+const { login, loading, error, isAdmin } = useAuth()
 
 const rules = {
     required: value => !!value || 'Required.',
@@ -17,6 +17,7 @@ const email = ref(null)
 const password = ref(null)
 const visible = ref(false)
 const form = ref(null); // Reference to the v-form component
+const isOverlayActive = ref(true);
 
 async function handlelogin() {
     // 1. Check if Vuetify validation rules pass
@@ -24,8 +25,6 @@ async function handlelogin() {
     if (!valid) return;
 
     loading.value = true;
-    // 2. Clear previous errors
-    error.value = "";
 
     try {
         // 3. Call the service method
@@ -34,12 +33,25 @@ async function handlelogin() {
             password: password.value,
         });
 
-        // 4. Success? --> Redirect
-        router.push('/homepage');
+        // 4. Success? --> Redirect based on role
+        if (isAdmin.value) {
+            router.push('/admin');
+        } else {
+            router.push('/homepage');
+        }
     } catch (err) {
         // Error is already reactive in the 'error' ref from useAuth
+        // The 'error' ref from useAuth is now populated.
+        // It will stay visible until the user types something new.
         console.error('Login attempt failed:', err)
+    } finally {
+        loading.value = false;
     }
+}
+
+// Function to clear error when user starts typing
+function clearError() {
+    if (error.value) error.value = "";
 }
 </script>
 
@@ -49,7 +61,7 @@ async function handlelogin() {
             <!-- Left Column: Visual Impact -->
             <v-col cols="12" md="5" class="d-none d-md-flex">
                 <v-img src="/images/img6-landscape.jpg" :aspect-ratio="16 / 9" cover class="h-100 position-relative">
-                    <v-overlay model-value="true" persistent contained scrim="black" opacity="0.4"
+                    <v-overlay :model-value="isOverlayActive" persistent contained scrim="black" opacity="0.4"
                         class="d-flex align-center">
                     </v-overlay>
                 </v-img>
@@ -77,7 +89,7 @@ async function handlelogin() {
                             <label
                                 class="text-caption font-weight-black text-grey-darken-3 mb-1 d-block text-uppercase ls-1">Email
                                 Address</label>
-                            <v-text-field v-model="email" density="compact" placeholder="name@example.com"
+                            <v-text-field v-model="email" @input="clearError" density="compact" placeholder="name@example.com"
                                 variant="outlined" color="black" base-color="grey" hide-details="auto" rounded="lg"
                                 prepend-inner-icon="mdi-email-outline"></v-text-field>
                         </div>
@@ -85,7 +97,7 @@ async function handlelogin() {
                         <div class="mb-10">
                             <label
                                 class="text-caption font-weight-black text-grey-darken-3 mb-1 d-block text-uppercase ls-1">Password</label>
-                            <v-text-field v-model="password" :rules="[rules.required, rules.min]"
+                            <v-text-field v-model="password" @input="clearError" :rules="[rules.required, rules.min]"
                                 :append-inner-icon="visible ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
                                 :type="visible ? 'text' : 'password'" density="compact" placeholder="••••••••"
                                 variant="outlined" color="black" base-color="grey"

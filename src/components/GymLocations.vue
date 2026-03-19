@@ -66,14 +66,17 @@ onMounted(() => {
 </script>
 
 <template>
-    <v-container fluid class="bg-black pt-16 pb-12" style="min-height: 100vh;">
+    <v-container fluid class="bg-grey-lighten-4 pt-16 pb-12 px-0" style="min-height: 100vh;">
         <v-container>
             <!-- Header Section -->
-            <v-row class="mb-12">
+            <v-row class="mb-12 text-center">
                 <v-col cols="12">
-                    <v-chip color="#ee6909" variant="tonal" rounded="pill" class="font-weight-black mb-4 px-4 text-uppercase border-orange-lighten-1 border-opacity-10">LOCATIONS</v-chip>
-                    <h2 class="text-h5 font-weight-black text-white">DISCOVER YOUR <span style="color: #ee6909;">POWER HUB</span></h2>
-                    <p class="text-grey-lighten-1 mt-4 text-h6 font-weight-regular" style="max-width: 600px; line-height: 1.6;">
+                    <v-chip color="#ee6909" variant="flat" rounded="pill" class="font-weight-black mb-4 px-6 text-caption text-uppercase elevation-4">LOCATIONS</v-chip>
+                    <h2 class="text-h3 font-weight-black text-grey-darken-4 uppercase tracking-tighter" style="letter-spacing: -1px;">DISCOVER YOUR <span style="color: #ee6909;">POWER HUB</span></h2>
+                    <div class="d-flex justify-center mt-6">
+                        <div style="width: 60px; height: 4px; background: #ee6909; border-radius: 2px;"></div>
+                    </div>
+                    <p class="text-grey-darken-1 mt-6 text-h6 font-weight-medium mx-auto" style="max-width: 600px; line-height: 1.6;">
                         One membership. Multiple elite locations. Access the best training floors in Nairobi.
                     </p>
                 </v-col>

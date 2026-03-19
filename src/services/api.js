@@ -26,7 +26,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        // Check if the error is 401 AND we aren't already on the login attempt
+        const isLoginRequest = error.config.url.includes("login");
+        if (error.response?.status === 401 && !isLoginRequest) {
             // Optional: Auto-logout user if token expires
             localStorage.clear();
             window.location.href = "/login";

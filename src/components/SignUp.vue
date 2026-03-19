@@ -1,27 +1,13 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../services/auth'
+import api from '../services/api';
 
 const router = useRouter();
 
 // Destructuring custom auth service to get the register method and status states
 const { register, loading, error } = useAuth()
-
-// Static list of gym locations for the dropdown menu
-const gymLocations = {
-    1: 'Iron Forge Fitness',
-    2: 'Pulse Performance Center',
-    3: 'ZenCore Wellness Studio',
-    4: 'MetroFit Downtown',
-    5: 'Elite Sports Conditioning Hub'
-};
-
-// Transforming gymLocations for Vuetify v-select compatibility
-const gymItems = Object.entries(gymLocations).map(([id, name]) => ({
-    title: name,
-    value: id
-}));
 
 /**
  * VALIDATION RULES
@@ -48,6 +34,25 @@ const password = ref(null)
 const confirmPassword = ref(null)
 const visible = ref(false) // Controls password visibility toggle (eye icon)
 const form = ref(null); // Reference to the v-form component
+
+const gyms = ref([]) // To store array of gym objects from the DB
+
+async function fetchGyms() {
+    loading.value = true
+    try {
+        // NOTE: No 'authHeader' here because the user isn't logged in yet!
+        const response = await api.get('getGyms');
+        gyms.value = response.data || [];
+    } catch (err) {
+        console.error('Error loading gyms:', err);
+    } finally {
+        loading.value = false
+    }
+}
+
+onMounted(() => {
+    fetchGyms();
+});
 
 /**
  * SIGN UP SUBMISSION
@@ -165,8 +170,7 @@ const signUp = async () => { // arrow function
                             </v-col>
                             <v-col cols="12" sm="5" class="pb-2">
                                 <label
-                                    class="text-caption font-weight-black text-grey-darken-3 mb-1 d-block text-uppercase ls-1">Date
-                                    of Birth</label>
+                                    class="text-caption font-weight-black text-grey-darken-3 mb-1 d-block text-uppercase ls-1">Date of Birth</label>
                                 <v-date-input v-model="dob" label="" variant="outlined" density="compact" color="black"
                                     base-color="grey-lighten-1" hide-details="auto" rounded="lg" prepend-icon=""
                                     prepend-inner-icon="mdi-calendar-outline"></v-date-input>
@@ -187,7 +191,7 @@ const signUp = async () => { // arrow function
                                 <label
                                     class="text-caption font-weight-black text-grey-darken-3 mb-1 d-block text-uppercase ls-1">Preferred
                                     Gym</label>
-                                <v-select v-model="selectedGym" :items="gymItems" item-title="title" item-value="value"
+                                <v-select v-model="selectedGym" :items="gyms" item-title="name" item-value="id"
                                     density="compact" placeholder="Select Location" variant="outlined" color="black"
                                     base-color="grey-lighten-1" hide-details="auto" rounded="lg"
                                     prepend-inner-icon="mdi-map-marker-outline"></v-select>

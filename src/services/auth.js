@@ -29,7 +29,6 @@ export function useAuth() {
      */
     async function login(credentials) {
         loading.value = true;
-        error.value = null;
 
         try {
             // Basic client-side validation to check whether credentials are entered
