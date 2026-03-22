@@ -1,0 +1,24 @@
+<?php
+// Role model representing a user role that can be assigned to users for access control and permissions within the gym management system, with details about the role's name and description
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Role extends Model
+{
+    use SoftDeletes;
+    protected $fillable = [
+            "name",
+            "slug",
+            "description"
+        ];
+
+    /**---------------
+     * Relationships
+    -----------------*/
+    public function users(){
+        return $this->hasMany(User::class);
+    }
+}
